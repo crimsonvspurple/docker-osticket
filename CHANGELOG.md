@@ -7,6 +7,7 @@
    ### Changed
       - Base image is now the official `php:8.4.27-fpm-bookworm` image with Nginx, because `tiredofit/nginx-php-fpm` is no longer published
       - A git checkout of the v1.18.4 tag is labeled `v1.18.4` instead of `1.18-git`
+      - Existing installs keep their files and database. PHP 8.4 return types are applied in place so deprecations are not printed into the page
       - PHP 8.5 is not used: osTicket v1.18.4 does not support it
       - PHP IMAP is omitted. PHP 8.4 removed the extension, and osTicket fetches mail through laminas-mail
       - Dropped the field-radiobuttons plugin. Its GitHub repository no longer exists

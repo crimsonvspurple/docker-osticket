@@ -71,6 +71,8 @@ RUN set -eux; \
     sed -i \
         -e "s/define('GIT_VERSION','\$git');/define('GIT_VERSION','${gitrev}');/" \
         -e "s/define('THIS_VERSION', MAJOR_VERSION.'-git');/define('THIS_VERSION', '${OSTICKET_VERSION}');/" \
+        -e "s/ini_set('display_errors', 1);/ini_set('display_errors', 0);/" \
+        -e "s/ini_set('display_startup_errors', 1);/ini_set('display_startup_errors', 0);/" \
         /assets/install/bootstrap.php; \
     rm -rf /assets/install/.git; \
     chown -R "${NGINX_USER}:${NGINX_GROUP}" /assets/install; \
@@ -120,6 +122,7 @@ RUN set -eux; \
 COPY install/nginx/osticket.conf /etc/nginx/sites-available/osticket.conf
 COPY install/assets /assets
 COPY install/usr/local/bin/docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
+COPY install/usr/local/bin/patch-php84.php /usr/local/bin/patch-php84.php
 
 RUN ln -sf /etc/nginx/sites-available/osticket.conf /etc/nginx/sites-enabled/osticket.conf \
     && chmod 755 /usr/local/bin/docker-entrypoint.sh

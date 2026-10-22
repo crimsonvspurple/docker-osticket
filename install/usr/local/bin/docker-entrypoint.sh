@@ -63,6 +63,9 @@ if [ ! -f "${NGINX_WEBROOT}/index.php" ]; then
     mkdir -p "${NGINX_WEBROOT}"
     cp -a /assets/install/. "${NGINX_WEBROOT}/"
 fi
+if [ -f "${NGINX_WEBROOT}/include/class.util.php" ]; then
+    php /usr/local/bin/patch-php84.php "${NGINX_WEBROOT}"
+fi
 mkdir -p /www/logs "${NGINX_WEBROOT}"
 
 php "${install_script}"
