@@ -57,7 +57,13 @@ Clone this repository and build the image with `docker build -t (imagename) .`
 
 ### Prebuilt Images
 
-This fork does not publish a prebuilt image. Build it from this repository. The image tag in [examples/docker-compose.yml](examples/docker-compose.yml) is `docker-osticket:1.18.4`.
+The image is published as a private package on GitHub Container Registry:
+
+- `ghcr.io/crimsonvspurple/docker-osticket:1.18.4`
+- `ghcr.io/crimsonvspurple/docker-osticket:4.0.0`
+- `ghcr.io/crimsonvspurple/docker-osticket:latest`
+
+A private package needs a GitHub token with `read:packages` to pull. Anonymous pulls work only after the package is made public, and GitHub does not allow changing a public package back to private.
 
 ## Configuration
 

@@ -2,7 +2,7 @@ services:
 
   osticket-app:
     build: ..
-    image: docker-osticket:1.18.4
+    image: ghcr.io/crimsonvspurple/docker-osticket:1.18.4
     container_name: osticket-app
     ports:
       - "8080:80"
