@@ -1,22 +1,21 @@
-# github.com/tiredofit/docker-osticket
+# github.com/crimsonvspurple/docker-osticket
 
-[![GitHub release](https://img.shields.io/github/v/tag/tiredofit/docker-osticket?style=flat-square)](https://github.com/tiredofit/docker-osticket/releases/latest)
-[![Build Status](https://img.shields.io/github/actions/workflow/status/tiredofit/docker-osticketmain.yml?branch=main&style=flat-square)](https://github.com/tiredofit/docker-osticket.git/actions)
-[![Docker Stars](https://img.shields.io/docker/stars/tiredofit/osticket.svg?style=flat-square&logo=docker)](https://hub.docker.com/r/tiredofit/osticket/)
-[![Docker Pulls](https://img.shields.io/docker/pulls/tiredofit/osticket.svg?style=flat-square&logo=docker)](https://hub.docker.com/r/tiredofit/osticket/)
-[![Become a sponsor](https://img.shields.io/badge/sponsor-tiredofit-181717.svg?logo=github&style=flat-square)](https://github.com/sponsors/tiredofit)
-[![Paypal Donate](https://img.shields.io/badge/donate-paypal-00457c.svg?logo=paypal&style=flat-square)](https://www.paypal.me/tiredofit)
+Fork of [tiredofit/docker-osticket](https://github.com/tiredofit/docker-osticket), which was archived on 7 October 2025.
 
 * * *
 ## About
 
-This will build a Docker Image for [OSTicket](https://www.osticket.com) - An open source helpdesk / ticketing system.
+This builds a Docker image for [osTicket](https://www.osticket.com), an open source helpdesk.
 
-* Automatically installs and sets up installation upon first start
+* osTicket v1.18.4
+* PHP 8.4.27 (the newest PHP release osTicket v1.18.4 supports; PHP 8.5 is not supported upstream)
+* Debian Bookworm, Nginx, and PHP-FPM
+* Installs and configures itself on first start
 
 ## Maintainer
 
-- [Dave Conroy](https://github.com/tiredofit)
+- [CvP](https://github.com/crimsonvspurple)
+- Original image by [Dave Conroy](https://github.com/tiredofit)
 
 ## Table of Contents
 
@@ -57,23 +56,8 @@ This will build a Docker Image for [OSTicket](https://www.osticket.com) - An ope
 Clone this repository and build the image with `docker build -t (imagename) .`
 
 ### Prebuilt Images
-Builds of the image are available on [Docker Hub](https://hub.docker.com/r/tiredofit/osticket)
 
-```bash
-docker pull docker.io/tiredofit/osticket:(imagetag)
-```
-
-Builds of the image are also available on the [Github Container Registry](https://github.com/tiredofit/docker-osticket/pkgs/container/docker-osticket)
-
-```
-docker pull ghcr.io/tiredofit/docker-osticket:(imagetag)
-```
-
-The following image tags are available along with their tagged release based on what's written in the [Changelog](CHANGELOG.md):
-
-| Container OS | Tag       |
-| ------------ | --------- |
-| Debian       | `:latest` |
+This fork does not publish a prebuilt image. Build it from this repository. The image tag in [examples/docker-compose.yml](examples/docker-compose.yml) is `docker-osticket:1.18.4`.
 
 ## Configuration
 
@@ -101,15 +85,9 @@ The following directories are used for configuration and can be mapped for persi
 
 #### Base Images used
 
-This image relies on an [Alpine Linux](https://hub.docker.com/r/tiredofit/alpine) or [Debian Linux](https://hub.docker.com/r/tiredofit/debian) base image that relies on an [init system](https://github.com/just-containers/s6-overlay) for added capabilities. Outgoing SMTP capabilities are handlded via `msmtp`. Individual container performance monitoring is performed by [zabbix-agent](https://zabbix.com). Additional tools include: `bash`,`curl`,`less`,`logrotate`,`nano`.
+The image is `php:8.4.27-fpm-bookworm` plus Nginx from Debian Bookworm. Outgoing mail uses `msmtp`. osTicket v1.18.4 supports PHP 8.2 through 8.4 and recommends 8.4, so this image stays on the latest 8.4 patch rather than PHP 8.5.
 
-Be sure to view the following repositories to understand all the customizable options:
-
-| Image                                                         | Description                            |
-| ------------------------------------------------------------- | -------------------------------------- |
-| [OS Base](https://github.com/tiredofit/docker-debian/)        | Customized Image based on Debian Linux |
-| [Nginx](https://github.com/tiredofit/docker-nginx/)           | Nginx webserver                        |
-| [PHP-FPM](https://github.com/tiredofit/docker-nginx-php-fpm/) | PHP Interpreter                        |
+PHP's IMAP extension was removed in PHP 8.4. Mail fetching uses osTicket's laminas-mail stack, which needs the ctype extension shipped with PHP.
 
 
 | Parameter         | Description                                                                 | default                 |
@@ -120,7 +98,7 @@ Be sure to view the following repositories to understand all the customizable op
 | `ADMIN_FIRSTNAME` | First name of Admin User                                                    |                         |
 | `ADMIN_LASTNAME`  | Last name of Admin User                                                     |                         |
 | `ADMIN_EMAIL`     | Admin Email address (Make sure it is different than INSTALL_EMAIL)          |                         |
-| `ADMIN_USER`      | Admin Username *Must be more than 5 characters*                             |                         |
+| `ADMIN_USER`      | Admin Username. At least 5 characters                                       |                         |
 | `ADMIN_PASS`      | Admin Password                                                              |                         |
 | `CRON_INTERVAL`   | Amount of time in Minutes to Check Incoming Mail                            | `10`                    |
 | `DB_HOST`         | Host or container name of MariaDB Server e.g. `osticket-db`                 |                         |
@@ -156,20 +134,7 @@ docker exec -it (whatever your container name is) bash
 ``
 ## Support
 
-These images were built to serve a specific need in a production environment and gradually have had more functionality added based on requests from the community.
-### Usage
-- The [Discussions board](../../discussions) is a great place for working with the community on tips and tricks of using this image.
-- Consider [sponsoring me](https://github.com/sponsors/tiredofit) for personalized support
-### Bugfixes
-- Please, submit a [Bug Report](issues/new) if something isn't working as expected. I'll do my best to issue a fix in short order.
-
-### Feature Requests
-- Feel free to submit a feature request, however there is no guarantee that it will be added, or at what timeline.
-- Consider [sponsoring me](https://github.com/sponsors/tiredofit) regarding development of features.
-
-### Updates
-- Best effort to track upstream changes, More priority if I am actively using the image in a production environment.
-- Consider [sponsoring me](https://github.com/sponsors/tiredofit) for up to date releases.
+This fork tracks current osTicket and PHP releases. Issues for this image belong on this repository. The original project is archived.
 
 ## License
 MIT. See [LICENSE](LICENSE) for more details.

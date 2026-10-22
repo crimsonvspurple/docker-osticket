@@ -25,7 +25,7 @@ $vars = array(
   'smtp_tls'      => getenv("SMTP_TLS"),
   'smtp_tls_certs' => getenv("SMTP_TLS_CERTS")       ?: '/etc/ssl/certs/ca-certificates.crt',
   'smtp_user'     => getenv("SMTP_USER"),
-  'smtp_pass'     => getenv("SMTP_PASSWORD"),
+  'smtp_pass'     => getenv("SMTP_PASS") ?: getenv("SMTP_PASSWORD"),
   'cron_interval'  => getenv("CRON_INTERVAL")        ?: 5,
   'siri'          => getenv("INSTALL_SECRET"),
   'config'        => getenv("INSTALL_CONFIG") ?: '<WEBROOT>/include/ost-sampleconfig.php'
@@ -76,7 +76,7 @@ $mailConfig = str_replace('%SMTP_TLS%', boolToOnOff(convertStrToBool('smtp_tls',
 $mailConfig);
 $mailConfig = str_replace('%SMTP_AUTH%', boolToOnOff($vars['smtp_user'] != ''), $mailConfig);
 
-if (!file_put_contents(MAIL_CONFIG_FILE, $mailConfig) || !chown(MAIL_CONFIG_FILE,'nginx')
+if (!file_put_contents(MAIL_CONFIG_FILE, $mailConfig) || !chown(MAIL_CONFIG_FILE,'www-data')
    || !chgrp(MAIL_CONFIG_FILE,'www-data') || !chmod(MAIL_CONFIG_FILE,0600)) {
    err("Failed to write mail configuration file");
 }
@@ -94,7 +94,7 @@ ini_set('mysqli.default_port', $vars['dbport']);
 
 //Check database installation status
 $db_installed = false;
-echo "** [osticket] DB - Connecting to database mysql://${vars['dbuser']}@${vars['dbhost']}/${vars['dbname']}\n";
+echo "** [osticket] DB - Connecting to database mysql://{$vars['dbuser']}@{$vars['dbhost']}/{$vars['dbname']}\n";
 if (!db_connect($vars['dbhost'],$vars['dbuser'],$vars['dbpass']))
    err(sprintf(__('** [osticket] Unable to connect to MySQL server: %s'), db_connect_error()));
 elseif(explode('.', db_version()) < explode('.', $installer->getMySQLVersion()))

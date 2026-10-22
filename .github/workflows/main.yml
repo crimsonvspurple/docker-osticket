@@ -1,15 +1,21 @@
-name: "build_image"
+name: build_image
 
 on:
   push:
     paths:
       - "**"
       - "!README.md"
+  pull_request:
+  workflow_dispatch:
 
 jobs:
   build:
-    uses: tiredofit/github_actions/.github/workflows/default_amd64_armv7_arm64.yml@main
-    #uses: tiredofit/github_actions/.github/workflows/default_amd64.yml@main
-    #uses: tiredofit/github_actions/.github/workflows/default_amd64_armv7_arm64.yml@main
-    #uses: tiredofit/github_actions/.github/workflows/default_amd64_arm64.yml@main
-    secrets: inherit
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: docker/setup-buildx-action@v3
+      - uses: docker/build-push-action@v6
+        with:
+          context: .
+          push: false
+          tags: docker-osticket:test

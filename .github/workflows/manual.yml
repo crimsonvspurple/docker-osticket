@@ -1,16 +1,16 @@
-name: "manual_build_image"
+name: manual_build_image
 
 on:
   workflow_dispatch:
-    inputs:
-      Manual Build:
-        description: 'Manual Build'
-        required: false
 
 jobs:
   build:
-    uses: tiredofit/github_actions/.github/workflows/default_amd64_armv7_arm64.yml@main
-    #uses: tiredofit/github_actions/.github/workflows/default_amd64.yml@main
-    #uses: tiredofit/github_actions/.github/workflows/default_amd64_armv7_arm64.yml@main
-    #uses: tiredofit/github_actions/.github/workflows/default_amd64_arm64.yml@main
-    secrets: inherit
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: docker/setup-buildx-action@v3
+      - uses: docker/build-push-action@v6
+        with:
+          context: .
+          push: false
+          tags: docker-osticket:test

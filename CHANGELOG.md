@@ -1,3 +1,20 @@
+## 4.0.0 2026-10-22 <github.com/crimsonvspurple>
+
+   ### Added
+      - osTicket v1.18.4
+      - PHP 8.4.27 on Debian Bookworm, the latest PHP release osTicket v1.18.4 supports (PHP 8.2 through 8.4, 8.4 recommended)
+
+   ### Changed
+      - Base image is now the official `php:8.4.27-fpm-bookworm` image with Nginx, because `tiredofit/nginx-php-fpm` is no longer published
+      - A git checkout of the v1.18.4 tag is labeled `v1.18.4` instead of `1.18-git`
+      - PHP 8.5 is not used: osTicket v1.18.4 does not support it
+      - PHP IMAP is omitted. PHP 8.4 removed the extension, and osTicket fetches mail through laminas-mail
+      - Dropped the field-radiobuttons plugin. Its GitHub repository no longer exists
+      - Point multi-ldap and Microsoft Teams plugins at their current repositories
+      - Accept `SMTP_PASS`, which is the documented variable name
+      - Example compose file uses MariaDB 11.4
+
+
 ## 3.6.2 2023-07-30 <dave at tiredofit dot ca>
 
    ### Changed

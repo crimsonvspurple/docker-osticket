@@ -1,8 +1,11 @@
 services:
 
   osticket-app:
-    image: tiredofit/osticket
+    build: ..
+    image: docker-osticket:1.18.4
     container_name: osticket-app
+    ports:
+      - "8080:80"
     labels:
       - traefik.enable=true
       - traefik.http.routers.osticket-app.rule=Host(`osticket.example.com`)
@@ -38,50 +41,25 @@ services:
       - ADMIN_USER=ostadmin
       - ADMIN_PASS=Password123
     networks:
-      - proxy
       - services
+    depends_on:
+      - osticket-db
     restart: always
 
   osticket-db:
-    image: tiredofit/mariadb:10.11
+    image: mariadb:11.4
     container_name: osticket-db
     volumes:
       - ./db:/var/lib/mysql
     environment:
-      - TIMEZONE=America/Vancouver
-      - CONTAINER_NAME=osticket-db
-
-      - ROOT_PASS=securepassword
-      - DB_NAME=osticket
-      - DB_USER=osticket
-      - DB_PASS=password
-    networks:
-      - services
-    restart: always
-
-  osticket-db-backup:
-    container_name: osticket-db-backup
-    image: tiredofit/db-backup:latest
-    volumes:
-      - ./dbbackup:/backup
-    environment:
-      - TIMEZONE=America/Vancouver
-      - CONTAINER_NAME=osticket-db-backup
-      - DB_HOST=osticket-db
-      - DB_TYPE=mariadb
-      - DB_NAME=osticket
-      - DB_USER=osticket
-      - DB_PASS=userpassword
-      - DB_DUMP_FREQ=1440
-      - DB_DUMP_BEGIN=0000
-      - DB_CLEANUP_TIME=8640
+      - TZ=America/Vancouver
+      - MARIADB_ROOT_PASSWORD=securepassword
+      - MARIADB_DATABASE=osticket
+      - MARIADB_USER=osticket
+      - MARIADB_PASSWORD=password
     networks:
       - services
     restart: always
 
 networks:
-  proxy:
-    external: true
   services:
-    external: true
-
