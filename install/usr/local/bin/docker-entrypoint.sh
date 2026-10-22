@@ -95,7 +95,7 @@ if [ -d "${NGINX_WEBROOT}/setup_hidden" ]; then
 fi
 
 cat > /etc/cron.d/osticket <<EOF
-*/${CRON_INTERVAL} * * * * root TZ=${TIMEZONE} php -q ${NGINX_WEBROOT}/api/cron.php >/proc/1/fd/1 2>/proc/1/fd/2
+*/${CRON_INTERVAL} * * * * root TZ=${TIMEZONE} /usr/local/bin/php -q ${NGINX_WEBROOT}/api/cron.php >/proc/1/fd/1 2>/proc/1/fd/2
 EOF
 chmod 644 /etc/cron.d/osticket
 
