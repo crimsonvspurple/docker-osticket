@@ -27,6 +27,7 @@ die() {
 [ -n "${ADMIN_EMAIL:-}" ] || die "ADMIN_EMAIL is required"
 [ -n "${ADMIN_USER:-}" ] || die "ADMIN_USER is required"
 [ "${#ADMIN_USER}" -ge 5 ] || die "ADMIN_USER must be at least 5 characters"
+[ -n "${INSTALL_SECRET:-}" ] || die "INSTALL_SECRET is required"
 
 if [ -f "/usr/share/zoneinfo/${TIMEZONE}" ]; then
     ln -sfn "/usr/share/zoneinfo/${TIMEZONE}" /etc/localtime

@@ -111,22 +111,10 @@ elseif(!db_select_database($vars['dbname']) && !db_create_database($vars['dbname
    }
 }
 
-//Create secret if not set by env var and not previously stored
-DEFINE('SECRET_FILE','<WEBROOT>/secret.txt');
 if (!$vars['siri']) {
-  if (file_exists(SECRET_FILE)) {
-    echo "** [osticket] DB - Loading installation secret\n";
-    $vars['siri'] = file_get_contents(SECRET_FILE);
-  } else {
-    echo "** [osticket] DB - Generating new installation secret and saving\n";
-    //Note that this randomly generated value is not intended to secure production sites!
-    $vars['siri'] = 
-substr(str_shuffle("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ01234567890_="), 0, 64);
-    file_put_contents(SECRET_FILE, $vars['siri']);
-  }
-} else {
-  echo "** [osticket] DB - Using installation secret from INSTALL_SECRET environmental variable\n";
+  err("** [osticket] INSTALL_SECRET is required");
 }
+echo "** [osticket] DB - Using installation secret from INSTALL_SECRET environmental variable\n";
 
 //Always rewrite config file in case MySQL details changed (e.g. ip address)
 echo "** [osticket] DB - Updating configuration file\n";

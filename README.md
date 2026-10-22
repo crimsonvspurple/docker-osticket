@@ -98,7 +98,7 @@ PHP's IMAP extension was removed in PHP 8.4. Mail fetching uses osTicket's lamin
 
 | Parameter         | Description                                                                 | default                 |
 | ----------------- | --------------------------------------------------------------------------- | ----------------------- |
-| `INSTALL_SECRET`  | A Large and Random Installation String (Auto Generates on Install if empty) |                         |
+| `INSTALL_SECRET`  | Required random installation secret. The container exits if this is empty    |                         |
 | `INSTALL_EMAIL`   | Installer Email (Use different email then ADMIN_EMAIL)                      | `helpdesk@example.com`  |
 | `INSTALL_NAME`    | Site Name                                                                   | `My Helpdesk`           |
 | `ADMIN_FIRSTNAME` | First name of Admin User                                                    |                         |
