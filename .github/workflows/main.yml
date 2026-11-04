@@ -31,5 +31,5 @@ jobs:
           push: ${{ github.event_name != 'pull_request' && github.ref == 'refs/heads/main' }}
           tags: |
             ghcr.io/crimsonvspurple/docker-osticket:1.18.4
-            ghcr.io/crimsonvspurple/docker-osticket:4.0.0
+            ghcr.io/crimsonvspurple/docker-osticket:4.0.1
             ghcr.io/crimsonvspurple/docker-osticket:latest

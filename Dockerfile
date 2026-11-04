@@ -1,6 +1,6 @@
 ARG PHP_VERSION=8.4.27
 
-FROM php:${PHP_VERSION}-fpm-bookworm
+FROM php:${PHP_VERSION}-fpm-trixie
 
 LABEL maintainer="CvP (github.com/crimsonvspurple)" \
       org.opencontainers.image.title="osTicket" \
@@ -9,10 +9,19 @@ LABEL maintainer="CvP (github.com/crimsonvspurple)" \
       org.opencontainers.image.licenses="MIT"
 
 ARG OSTICKET_VERSION=v1.18.4
-ARG OSTICKET_PLUGINS_VERSION=develop
+ARG OSTICKET_PLUGINS_SHA=67a1450f2f79cec0524385de6ad35207369f32e4
+ARG PLUGIN_ARCHIVER_SHA=a1e20bb230f0943769c0e548539d553881ecfb1e
+ARG PLUGIN_ATTACHMENT_PREVIEW_SHA=50bbb30c20251f25f43cc1854fcacd45ee6d0c0e
+ARG PLUGIN_AUTO_CLOSER_SHA=e367b013bb89eb2b27d69c25db920b3e7c0359ec
+ARG PLUGIN_FETCH_NOTE_SHA=7bd28052a33d448db68e0393ca5d92f1b1744283
+ARG PLUGIN_MENTIONER_SHA=4a39ba6b34f46b3f9749f0d60753a504e6d8ec2a
+ARG PLUGIN_MULTI_LDAP_SHA=3e4d23273b87ab1310490d2467e382fa1de8923c
+ARG PLUGIN_PREVENT_AUTOSCROLL_SHA=2b5c51200d0f64da15d1f504e9294d877577fc46
+ARG PLUGIN_REWRITER_SHA=2c5e3bad0f0cb94a1b51a33a854cfd551ea67e30
+ARG PLUGIN_SLACK_SHA=15c0cadfbc0c0548cde5750eda5f29d36381683b
+ARG PLUGIN_TEAMS_SHA=7326b8d5b8ac4314e825a88f8dad07e93ac4c59b
 
 ENV OSTICKET_VERSION=${OSTICKET_VERSION} \
-    OSTICKET_PLUGINS_VERSION=${OSTICKET_PLUGINS_VERSION} \
     OSTICKET_REPO_URL=https://github.com/osTicket/osTicket \
     OSTICKET_PLUGINS_REPO_URL=https://github.com/osTicket/osTicket-plugins \
     DB_PREFIX=ost_ \
@@ -82,7 +91,11 @@ RUN set -eux; \
     chown -R root:root /assets/install/setup_hidden; \
     chmod 700 /assets/install/setup_hidden; \
     \
-    git clone --depth 1 --branch "${OSTICKET_PLUGINS_VERSION}" "${OSTICKET_PLUGINS_REPO_URL}" /usr/src/plugins; \
+    mkdir -p /usr/src/plugins; \
+    git -C /usr/src/plugins init; \
+    git -C /usr/src/plugins remote add origin "${OSTICKET_PLUGINS_REPO_URL}"; \
+    git -C /usr/src/plugins fetch --depth 1 origin "${OSTICKET_PLUGINS_SHA}"; \
+    git -C /usr/src/plugins checkout --detach FETCH_HEAD; \
     cd /usr/src/plugins; \
     php -d phar.readonly=0 make.php hydrate; \
     mkdir -p /assets/install/include/plugins; \
@@ -92,22 +105,62 @@ RUN set -eux; \
     done; \
     cd /; \
     \
-    git clone --depth 1 --branch master https://github.com/clonemeagain/osticket-plugin-archiver.git /assets/install/include/plugins/archiver; \
-    git clone --depth 1 --branch master https://github.com/clonemeagain/attachment_preview.git /assets/install/include/plugins/attachment-preview; \
-    git clone --depth 1 --branch master https://github.com/clonemeagain/plugin-autocloser.git /assets/install/include/plugins/auto-closer; \
-    git clone --depth 1 --branch master https://github.com/bkonetzny/osticket-fetch-note.git /assets/install/include/plugins/fetch-note; \
-    git clone --depth 1 --branch master https://github.com/clonemeagain/osticket-plugin-mentioner.git /assets/install/include/plugins/mentioner; \
-    git clone --depth 1 --branch master https://github.com/philbertphotos/osticket-multildap-auth-plugin.git /assets/install/include/plugins/multi-ldap; \
+    mkdir -p /assets/install/include/plugins/archiver; \
+    git -C /assets/install/include/plugins/archiver init; \
+    git -C /assets/install/include/plugins/archiver remote add origin https://github.com/clonemeagain/osticket-plugin-archiver.git; \
+    git -C /assets/install/include/plugins/archiver fetch --depth 1 origin "${PLUGIN_ARCHIVER_SHA}"; \
+    git -C /assets/install/include/plugins/archiver checkout --detach FETCH_HEAD; \
+    mkdir -p /assets/install/include/plugins/attachment-preview; \
+    git -C /assets/install/include/plugins/attachment-preview init; \
+    git -C /assets/install/include/plugins/attachment-preview remote add origin https://github.com/clonemeagain/attachment_preview.git; \
+    git -C /assets/install/include/plugins/attachment-preview fetch --depth 1 origin "${PLUGIN_ATTACHMENT_PREVIEW_SHA}"; \
+    git -C /assets/install/include/plugins/attachment-preview checkout --detach FETCH_HEAD; \
+    mkdir -p /assets/install/include/plugins/auto-closer; \
+    git -C /assets/install/include/plugins/auto-closer init; \
+    git -C /assets/install/include/plugins/auto-closer remote add origin https://github.com/clonemeagain/plugin-autocloser.git; \
+    git -C /assets/install/include/plugins/auto-closer fetch --depth 1 origin "${PLUGIN_AUTO_CLOSER_SHA}"; \
+    git -C /assets/install/include/plugins/auto-closer checkout --detach FETCH_HEAD; \
+    mkdir -p /assets/install/include/plugins/fetch-note; \
+    git -C /assets/install/include/plugins/fetch-note init; \
+    git -C /assets/install/include/plugins/fetch-note remote add origin https://github.com/bkonetzny/osticket-fetch-note.git; \
+    git -C /assets/install/include/plugins/fetch-note fetch --depth 1 origin "${PLUGIN_FETCH_NOTE_SHA}"; \
+    git -C /assets/install/include/plugins/fetch-note checkout --detach FETCH_HEAD; \
+    mkdir -p /assets/install/include/plugins/mentioner; \
+    git -C /assets/install/include/plugins/mentioner init; \
+    git -C /assets/install/include/plugins/mentioner remote add origin https://github.com/clonemeagain/osticket-plugin-mentioner.git; \
+    git -C /assets/install/include/plugins/mentioner fetch --depth 1 origin "${PLUGIN_MENTIONER_SHA}"; \
+    git -C /assets/install/include/plugins/mentioner checkout --detach FETCH_HEAD; \
+    mkdir -p /assets/install/include/plugins/multi-ldap; \
+    git -C /assets/install/include/plugins/multi-ldap init; \
+    git -C /assets/install/include/plugins/multi-ldap remote add origin https://github.com/philbertphotos/osticket-multildap-auth-plugin.git; \
+    git -C /assets/install/include/plugins/multi-ldap fetch --depth 1 origin "${PLUGIN_MULTI_LDAP_SHA}"; \
+    git -C /assets/install/include/plugins/multi-ldap checkout --detach FETCH_HEAD; \
     if [ -d /assets/install/include/plugins/multi-ldap/multi-ldap ]; then \
         mv /assets/install/include/plugins/multi-ldap /tmp/multi-ldap-src; \
         mkdir -p /assets/install/include/plugins/multi-ldap; \
         cp -a /tmp/multi-ldap-src/multi-ldap/. /assets/install/include/plugins/multi-ldap/; \
         rm -rf /tmp/multi-ldap-src; \
     fi; \
-    git clone --depth 1 --branch master https://github.com/clonemeagain/osticket-plugin-preventautoscroll.git /assets/install/include/plugins/prevent-autoscroll; \
-    git clone --depth 1 --branch master https://github.com/clonemeagain/plugin-fwd-rewriter.git /assets/install/include/plugins/rewriter; \
-    git clone --depth 1 --branch master https://github.com/clonemeagain/osticket-slack.git /assets/install/include/plugins/slack; \
-    git clone --depth 1 --branch master https://github.com/Data-Tech-International/osTicket-Microsoft-Teams-plugin.git /assets/install/include/plugins/teams; \
+    mkdir -p /assets/install/include/plugins/prevent-autoscroll; \
+    git -C /assets/install/include/plugins/prevent-autoscroll init; \
+    git -C /assets/install/include/plugins/prevent-autoscroll remote add origin https://github.com/clonemeagain/osticket-plugin-preventautoscroll.git; \
+    git -C /assets/install/include/plugins/prevent-autoscroll fetch --depth 1 origin "${PLUGIN_PREVENT_AUTOSCROLL_SHA}"; \
+    git -C /assets/install/include/plugins/prevent-autoscroll checkout --detach FETCH_HEAD; \
+    mkdir -p /assets/install/include/plugins/rewriter; \
+    git -C /assets/install/include/plugins/rewriter init; \
+    git -C /assets/install/include/plugins/rewriter remote add origin https://github.com/clonemeagain/plugin-fwd-rewriter.git; \
+    git -C /assets/install/include/plugins/rewriter fetch --depth 1 origin "${PLUGIN_REWRITER_SHA}"; \
+    git -C /assets/install/include/plugins/rewriter checkout --detach FETCH_HEAD; \
+    mkdir -p /assets/install/include/plugins/slack; \
+    git -C /assets/install/include/plugins/slack init; \
+    git -C /assets/install/include/plugins/slack remote add origin https://github.com/clonemeagain/osticket-slack.git; \
+    git -C /assets/install/include/plugins/slack fetch --depth 1 origin "${PLUGIN_SLACK_SHA}"; \
+    git -C /assets/install/include/plugins/slack checkout --detach FETCH_HEAD; \
+    mkdir -p /assets/install/include/plugins/teams; \
+    git -C /assets/install/include/plugins/teams init; \
+    git -C /assets/install/include/plugins/teams remote add origin https://github.com/Data-Tech-International/osTicket-Microsoft-Teams-plugin.git; \
+    git -C /assets/install/include/plugins/teams fetch --depth 1 origin "${PLUGIN_TEAMS_SHA}"; \
+    git -C /assets/install/include/plugins/teams checkout --detach FETCH_HEAD; \
     find /assets/install/include/plugins -name .git -type d -print0 | xargs -0 rm -rf; \
     \
     rm -f /etc/nginx/sites-enabled/default; \

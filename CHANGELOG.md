@@ -1,11 +1,18 @@
+## 4.0.1 2026-11-05 <github.com/crimsonvspurple>
+
+   ### Changed
+      - Base image is now `php:8.4.27-fpm-trixie` (Debian Trixie)
+      - Official osTicket-plugins and all third-party plugins are pinned to commit SHAs (ARGs) so rebuilds are reproducible; bump the ARGs deliberately on updates
+
+
 ## 4.0.0 2026-10-22 <github.com/crimsonvspurple>
 
    ### Added
       - osTicket v1.18.4
-      - PHP 8.4.27 on Debian Bookworm, the latest PHP release osTicket v1.18.4 supports (PHP 8.2 through 8.4, 8.4 recommended)
+      - PHP 8.4.27 on Debian Trixie, the latest PHP release osTicket v1.18.4 supports (PHP 8.2 through 8.4, 8.4 recommended)
 
    ### Changed
-      - Base image is now the official `php:8.4.27-fpm-bookworm` image with Nginx, because `tiredofit/nginx-php-fpm` is no longer published
+      - Base image is now the official `php:8.4.27-fpm-trixie` image with Nginx, because `tiredofit/nginx-php-fpm` is no longer published
       - A git checkout of the v1.18.4 tag is labeled `v1.18.4` instead of `1.18-git`
       - Existing installs keep their files and database. PHP 8.4 return types are applied in place so deprecations are not printed into the page
       - Cron calls `/usr/local/bin/php`. Cron's PATH does not include `/usr/local/bin`, so `php` was not found and scheduled mail checks never ran
