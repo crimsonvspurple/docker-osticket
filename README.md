@@ -9,7 +9,7 @@ This builds a Docker image for [osTicket](https://www.osticket.com), an open sou
 
 * osTicket v1.18.4
 * PHP 8.4.27 (the newest PHP release osTicket v1.18.4 supports; PHP 8.5 is not supported upstream)
-* Debian Bookworm, Nginx, and PHP-FPM
+* Debian Trixie, Nginx, and PHP-FPM
 * Installs and configures itself on first start
 
 ## Maintainer
@@ -91,7 +91,7 @@ The following directories are used for configuration and can be mapped for persi
 
 #### Base Images used
 
-The image is `php:8.4.27-fpm-bookworm` plus Nginx from Debian Bookworm. Outgoing mail uses `msmtp`. osTicket v1.18.4 supports PHP 8.2 through 8.4 and recommends 8.4, so this image stays on the latest 8.4 patch rather than PHP 8.5.
+The image is `php:8.4.27-fpm-trixie` plus Nginx from Debian Trixie. Outgoing mail uses `msmtp`. osTicket v1.18.4 supports PHP 8.2 through 8.4 and recommends 8.4, so this image stays on the latest 8.4 patch rather than PHP 8.5.
 
 PHP's IMAP extension was removed in PHP 8.4. Mail fetching uses osTicket's laminas-mail stack, which needs the ctype extension shipped with PHP.
 
@@ -140,7 +140,7 @@ docker exec -it (whatever your container name is) bash
 ``
 ## Support
 
-This fork tracks current osTicket and PHP releases. Issues for this image belong on this repository. The original project is archived.
+This fork tracks current osTicket and PHP releases. Third-party plugins are pinned to commit SHAs via Dockerfile ARGs. Issues for this image belong on this repository. The original project is archived.
 
 ## License
 MIT. See [LICENSE](LICENSE) for more details.
