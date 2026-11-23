@@ -1,4 +1,4 @@
-ARG PHP_VERSION=8.4.27
+ARG PHP_VERSION=8.4.28
 
 FROM php:${PHP_VERSION}-fpm-trixie
 
