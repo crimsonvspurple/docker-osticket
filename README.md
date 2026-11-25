@@ -119,6 +119,11 @@ PHP's IMAP extension was removed in PHP 8.4. Mail fetching uses osTicket's lamin
 | `SMTP_TLS`        | Should TLS be used (`0`=no `1`=yes)                                         | `1`                     |
 | `SMTP_USER`       | SMTP Authentication user                                                    |                         |
 | `SMTP_PASS`       | SMTP Authentication password                                                |                         |
+| `TRUSTED_PROXIES` | Comma separated IPs or CIDRs of reverse proxies whose `X-Forwarded-For` is trusted, e.g. the proxy's Docker network plus the Cloudflare ranges. Without it, `VIRTUAL_HOST` trusts every proxy (`*`) |                         |
+
+### Upgrading
+
+The webroot volume keeps the code it was installed with until the image ships a different osTicket build. On start the entrypoint compares `include/.docker-osticket-version` in the volume with the image, and when they differ it saves the old code to `include/.code-backups/` (newest 3 kept), copies the new code in, keeps `include/ost-config.php` and installed plugins, and runs `php manage.php upgrade` for any schema changes. Back up the database before pulling a new image.
 
 ### Networking
 
