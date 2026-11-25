@@ -83,6 +83,7 @@ RUN set -eux; \
         -e "s/ini_set('display_errors', 1);/ini_set('display_errors', 0);/" \
         -e "s/ini_set('display_startup_errors', 1);/ini_set('display_startup_errors', 0);/" \
         /assets/install/bootstrap.php; \
+    printf '%s %s\n' "${OSTICKET_VERSION}" "${gitrev}" > /assets/install/include/.docker-osticket-version; \
     rm -rf /assets/install/.git; \
     chown -R "${NGINX_USER}:${NGINX_GROUP}" /assets/install; \
     chmod -R a+rX /assets/install; \
