@@ -1,3 +1,13 @@
+## 4.1.0 2026-11-25 <github.com/crimsonvspurple>
+
+   ### Added
+      - Existing installs are upgraded to the osTicket code in the image. The image writes its version to `include/.docker-osticket-version`; when the volume holds a different version, the entrypoint saves the current code to `include/.code-backups/` (newest 3 kept), copies the new code over it and runs `php manage.php upgrade`. `include/ost-config.php` and installed plugins are left as they are; plugins the image adds are copied in only when missing
+      - `TRUSTED_PROXIES` sets the reverse proxies whose `X-Forwarded-For` osTicket trusts (IPs or CIDRs, comma separated), so logs and login lockouts see the real client IP
+
+   ### Fixed
+      - Existing installs never received new osTicket code: the entrypoint only copied code when `index.php` was missing, so a volume installed with an older image kept running that older osTicket
+
+
 ## 4.0.1 2026-11-05 <github.com/crimsonvspurple>
 
    ### Changed
