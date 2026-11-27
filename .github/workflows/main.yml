@@ -1,16 +1,18 @@
 name: build_image
 
 on:
+  pull_request:
   push:
+    branches: [main]
     paths:
       - "**"
       - "!README.md"
-  pull_request:
   workflow_dispatch:
 
 permissions:
   contents: read
   packages: write
+  actions: write
 
 jobs:
   build:
@@ -28,7 +30,10 @@ jobs:
       - uses: docker/build-push-action@v7
         with:
           context: .
+          platforms: linux/amd64
           push: ${{ github.event_name != 'pull_request' && github.ref == 'refs/heads/main' }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
           tags: |
             ghcr.io/crimsonvspurple/docker-osticket:1.18.4
             ghcr.io/crimsonvspurple/docker-osticket:4.1.1
