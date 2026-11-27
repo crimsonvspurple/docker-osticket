@@ -1,3 +1,9 @@
+## 4.1.1 2026-11-27 <github.com/crimsonvspurple>
+
+   ### Changed
+      - Base image is now `php:8.4.28-fpm-trixie` (PHP 8.4.28 security release)
+
+
 ## 4.1.0 2026-11-25 <github.com/crimsonvspurple>
 
    ### Added

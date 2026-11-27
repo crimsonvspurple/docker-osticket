@@ -8,7 +8,7 @@ Fork of [tiredofit/docker-osticket](https://github.com/tiredofit/docker-osticket
 This builds a Docker image for [osTicket](https://www.osticket.com), an open source helpdesk.
 
 * osTicket v1.18.4
-* PHP 8.4.27 (the newest PHP release osTicket v1.18.4 supports; PHP 8.5 is not supported upstream)
+* PHP 8.4.28 (the newest PHP release osTicket v1.18.4 supports; PHP 8.5 is not supported upstream)
 * Debian Trixie, Nginx, and PHP-FPM
 * Installs and configures itself on first start
 
@@ -60,7 +60,7 @@ Clone this repository and build the image with `docker build -t (imagename) .`
 The image is published as a private package on GitHub Container Registry:
 
 - `ghcr.io/crimsonvspurple/docker-osticket:1.18.4`
-- `ghcr.io/crimsonvspurple/docker-osticket:4.0.0`
+- `ghcr.io/crimsonvspurple/docker-osticket:4.1.1`
 - `ghcr.io/crimsonvspurple/docker-osticket:latest`
 
 A private package needs a GitHub token with `read:packages` to pull. Anonymous pulls work only after the package is made public, and GitHub does not allow changing a public package back to private.
@@ -91,7 +91,7 @@ The following directories are used for configuration and can be mapped for persi
 
 #### Base Images used
 
-The image is `php:8.4.27-fpm-trixie` plus Nginx from Debian Trixie. Outgoing mail uses `msmtp`. osTicket v1.18.4 supports PHP 8.2 through 8.4 and recommends 8.4, so this image stays on the latest 8.4 patch rather than PHP 8.5.
+The image is `php:8.4.28-fpm-trixie` plus Nginx from Debian Trixie. Outgoing mail uses `msmtp`. osTicket v1.18.4 supports PHP 8.2 through 8.4 and recommends 8.4, so this image stays on the latest 8.4 patch rather than PHP 8.5.
 
 PHP's IMAP extension was removed in PHP 8.4. Mail fetching uses osTicket's laminas-mail stack, which needs the ctype extension shipped with PHP.
 
